@@ -1,6 +1,7 @@
 (function() {
 
 CKEDITOR.dialog.add('insertlink', function(editor) {
+    var urlRegex = /^(?:http|https|ftp|news):\/\/(.*)$/i;
     return {
         title: editor.lang.link.title,
         minWidth: 350,
@@ -53,12 +54,12 @@ CKEDITOR.dialog.add('insertlink', function(editor) {
             var attributes = {href: 'javascript:void(0);'},
                 data = {url: attributes.href};
             this.commitContent(data);
-            attributes._cke_saved_href = data.url;
+            attributes._cke_saved_href = data.url.match(urlRegex) ? data.url : 'http://' + data.url;
             if (!this._.selectedElement) {
                 var selection = editor.getSelection(),
                     ranges = selection.getRanges();
                 if (ranges.length == 1 && ranges[0].collapsed) {
-                    var text = new CKEDITOR.dom.text(attributes._cke_saved_href, editor.document);
+                    var text = new CKEDITOR.dom.text(data.url, editor.document);
                     ranges[0].insertNode(text);
                     ranges[0].selectNodeContents(text);
                     selection.selectRanges(ranges);
