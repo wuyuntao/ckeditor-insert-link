@@ -21,6 +21,17 @@ CKEDITOR.plugins.add('insertlink', {
                 e.data.dialog = 'insertlink';
             }
         });
+
+        if (editor.addMenuItems) {
+            editor.addMenuItems({
+                link: {
+                    label : editor.lang.link.menu,
+                    command : 'insertlink',
+                    group : 'link',
+                    order : 1
+                }
+            });
+        }
     }
 });
 
